@@ -10,7 +10,7 @@ import Command from '.';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('stop')
-    .setDescription('stop playback, disconnect, and clear all songs in the queue');
+    .setDescription('停止播放，並中斷連線與清除所有在隊列中的歌曲');
 
   public requiresVC = true;
 
@@ -24,14 +24,14 @@ export default class implements Command {
     const player = this.playerManager.get(interaction.guild!.id);
 
     if (!player.voiceConnection) {
-      throw new Error('not connected');
+      throw new Error('未連接');
     }
 
     if (player.status !== STATUS.PLAYING) {
-      throw new Error('not currently playing');
+      throw new Error('目前未正在播放');
     }
 
     player.stop();
-    await interaction.reply('u betcha');
+    await interaction.reply('當然好');
   }
 }

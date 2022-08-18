@@ -10,10 +10,10 @@ import {buildPlayingMessageEmbed} from '../utils/build-embed.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('skip')
-    .setDescription('skip the next songs')
+    .setDescription('跳過並到下一首歌')
     .addIntegerOption(option => option
       .setName('number')
-      .setDescription('number of songs to skip [default: 1]')
+      .setDescription('要跳過的歌曲數量 [預設: 1]')
       .setRequired(false));
 
   public requiresVC = true;
@@ -28,7 +28,7 @@ export default class implements Command {
     const numToSkip = interaction.options.getInteger('number') ?? 1;
 
     if (numToSkip < 1) {
-      throw new Error('invalid number of songs to skip');
+      throw new Error('無效的歌曲跳過數量');
     }
 
     const player = this.playerManager.get(interaction.guild!.id);
@@ -36,11 +36,11 @@ export default class implements Command {
     try {
       await player.forward(numToSkip);
       await interaction.reply({
-        content: 'keep \'er movin\'',
+        content: '讓它繼續播放',
         embeds: player.getCurrent() ? [buildPlayingMessageEmbed(player)] : [],
       });
     } catch (_: unknown) {
-      throw new Error('no song to skip to');
+      throw new Error('沒有可跳過到的歌曲');
     }
   }
 }

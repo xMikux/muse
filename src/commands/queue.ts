@@ -10,10 +10,10 @@ import {buildQueueEmbed} from '../utils/build-embed.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('queue')
-    .setDescription('show the current queue')
+    .setDescription('顯示目前的歌曲隊列')
     .addIntegerOption(option => option
       .setName('page')
-      .setDescription('page of queue to show [default: 1]')
+      .setDescription('要顯示的隊列頁目 [預設: 1]')
       .setRequired(false));
 
   private readonly playerManager: PlayerManager;

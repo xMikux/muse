@@ -67,13 +67,13 @@ export default class {
           }
 
           if (!interaction.guild) {
-            await interaction.reply(errorMsg('you can\'t use this bot in a DM'));
+            await interaction.reply(errorMsg('你不能在私訊中使用此機器人'));
             return;
           }
 
           const requiresVC = command.requiresVC instanceof Function ? command.requiresVC(interaction) : command.requiresVC;
           if (requiresVC && interaction.member && !isUserInVoice(interaction.guild, interaction.member.user as User)) {
-            await interaction.reply({content: errorMsg('gotta be in a voice channel'), ephemeral: true});
+            await interaction.reply({content: errorMsg('必須在語音頻道'), ephemeral: true});
             return;
           }
 
@@ -115,7 +115,7 @@ export default class {
       }
     });
 
-    const spinner = ora('📡 connecting to Discord...').start();
+    const spinner = ora('📡 連線至 Discord...').start();
 
     this.client.once('ready', async () => {
       debug(generateDependencyReport());
@@ -123,13 +123,13 @@ export default class {
       // Update commands
       const rest = new REST({version: '10'}).setToken(this.config.DISCORD_TOKEN);
       if (this.shouldRegisterCommandsOnBot) {
-        spinner.text = '📡 updating commands on bot...';
+        spinner.text = '📡 更新機器人上的指令...';
         await rest.put(
           Routes.applicationCommands(this.client.user!.id),
           {body: this.commandsByName.map(command => command.slashCommand.toJSON())},
         );
       } else {
-        spinner.text = '📡 updating commands in all guilds...';
+        spinner.text = '📡 更新所有伺服器上的指令...';
 
         await Promise.all([
           ...this.client.guilds.cache.map(async guild => {
@@ -157,7 +157,7 @@ export default class {
         status: this.config.BOT_STATUS,
       });
 
-      spinner.succeed(`Ready! Invite the bot with https://discordapp.com/oauth2/authorize?client_id=${this.client.user?.id ?? ''}&scope=bot%20applications.commands&permissions=36700160`);
+      spinner.succeed(`就緒！ 邀請機器人： https://discordapp.com/oauth2/authorize?client_id=${this.client.user?.id ?? ''}&scope=bot%20applications.commands&permissions=36700160`);
     });
 
     this.client.on('error', console.error);

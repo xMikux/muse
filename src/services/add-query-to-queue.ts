@@ -37,7 +37,7 @@ export default class AddQueryToQueue {
     const settings = await prisma.setting.findUnique({where: {guildId}});
 
     if (!settings) {
-      throw new Error('Could not find settings for guild');
+      throw new Error('無法找到伺服器的設定');
     }
 
     const {playlistLimit} = settings;
@@ -70,25 +70,25 @@ export default class AddQueryToQueue {
           if (songs) {
             newSongs.push(...songs);
           } else {
-            throw new Error('that doesn\'t exist');
+            throw new Error('那並不存在');
           }
         }
       } else if (url.protocol === 'spotify:' || url.host === 'open.spotify.com') {
         const [convertedSongs, nSongsNotFound, totalSongs] = await this.getSongs.spotifySource(query, playlistLimit, shouldSplitChapters);
 
         if (totalSongs > playlistLimit) {
-          extraMsg = `a random sample of ${playlistLimit} songs was taken`;
+          extraMsg = `隨機抽取 ${playlistLimit} 首歌的樣本`;
         }
 
         if (totalSongs > playlistLimit && nSongsNotFound !== 0) {
-          extraMsg += ' and ';
+          extraMsg += ' 和 ';
         }
 
         if (nSongsNotFound !== 0) {
           if (nSongsNotFound === 1) {
-            extraMsg += '1 song was not found';
+            extraMsg += '未找到 1 首歌';
           } else {
-            extraMsg += `${nSongsNotFound.toString()} songs were not found`;
+            extraMsg += `${nSongsNotFound.toString()} 首歌未找到`;
           }
         }
 
@@ -99,7 +99,7 @@ export default class AddQueryToQueue {
         if (song) {
           newSongs.push(song);
         } else {
-          throw new Error('that doesn\'t exist');
+          throw new Error('那並不存在');
         }
       }
     } catch (_: unknown) {
@@ -109,12 +109,12 @@ export default class AddQueryToQueue {
       if (songs) {
         newSongs.push(...songs);
       } else {
-        throw new Error('that doesn\'t exist');
+        throw new Error('那並不存在');
       }
     }
 
     if (newSongs.length === 0) {
-      throw new Error('no songs found');
+      throw new Error('未找到歌曲');
     }
 
     if (shuffleAdditions) {
@@ -140,7 +140,7 @@ export default class AddQueryToQueue {
       await player.play();
 
       if (wasPlayingSong) {
-        statusMsg = 'resuming playback';
+        statusMsg = '恢復播放';
       }
 
       await interaction.editReply({
@@ -165,9 +165,9 @@ export default class AddQueryToQueue {
     }
 
     if (newSongs.length === 1) {
-      await interaction.editReply(`u betcha, **${firstSong.title}** added to the${addToFrontOfQueue ? ' front of the' : ''} queue${extraMsg}`);
+      await interaction.editReply(`當然好, **${firstSong.title}** 添加到 ${addToFrontOfQueue ? ' 最前面的' : ''} 隊列${extraMsg}`);
     } else {
-      await interaction.editReply(`u betcha, **${firstSong.title}** and ${newSongs.length - 1} other songs were added to the queue${extraMsg}`);
+      await interaction.editReply(`當然好, **${firstSong.title}** 和 ${newSongs.length - 1} 首其他歌曲已添加到隊列中 ${extraMsg}`);
     }
   }
 }

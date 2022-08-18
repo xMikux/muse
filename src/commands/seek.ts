@@ -11,10 +11,10 @@ import durationStringToSeconds from '../utils/duration-string-to-seconds.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('seek')
-    .setDescription('seek to a position from beginning of song')
+    .setDescription('從歌曲的開頭跳到指定時間位置')
     .addStringOption(option =>
       option.setName('time')
-        .setDescription('an interval expression or number of seconds (1m, 30s, 100)')
+        .setDescription('間隔表達式或秒數 （例如：1m、30s、100)')
         .setRequired(true),
     );
 
@@ -32,11 +32,11 @@ export default class implements Command {
     const currentSong = player.getCurrent();
 
     if (!currentSong) {
-      throw new Error('nothing is playing');
+      throw new Error('沒有歌曲正在播放');
     }
 
     if (currentSong.isLive) {
-      throw new Error('can\'t seek in a livestream');
+      throw new Error('你不能在直播影片進行跳段');
     }
 
     const time = interaction.options.getString('time')!;
@@ -50,7 +50,7 @@ export default class implements Command {
     }
 
     if (seekTime > currentSong.length) {
-      throw new Error('can\'t seek past the end of the song');
+      throw new Error('無法跳段到歌曲的結尾');
     }
 
     await Promise.all([
@@ -58,6 +58,6 @@ export default class implements Command {
       interaction.deferReply(),
     ]);
 
-    await interaction.editReply(`👍 seeked to ${prettyTime(player.getPosition())}`);
+    await interaction.editReply(`👍 已成功跳段到 ${prettyTime(player.getPosition())}`);
   }
 }

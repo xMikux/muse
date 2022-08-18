@@ -9,7 +9,7 @@ import Command from '.';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('disconnect')
-    .setDescription('pause and disconnect Muse');
+    .setDescription('暫停歌曲並中斷 Muse 的連線');
 
   public requiresVC = true;
 
@@ -23,11 +23,11 @@ export default class implements Command {
     const player = this.playerManager.get(interaction.guild!.id);
 
     if (!player.voiceConnection) {
-      throw new Error('not connected');
+      throw new Error('未連接');
     }
 
     player.disconnect();
 
-    await interaction.reply('u betcha');
+    await interaction.reply('當然好');
   }
 }

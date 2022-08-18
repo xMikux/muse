@@ -35,6 +35,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
+      - name: Get current time
+        uses: josStorer/get-current-time@v2
+        id: current-time
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
@@ -44,6 +48,9 @@ jobs:
           tags: ghcr.io/xmikux/muse:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
+          build-args: |
+            COMMIT_HASH=${{ github.sha }}
+            BUILD_DATE=${{ steps.current-time.outputs.time }}
 
       - name: Move cache
         run: |

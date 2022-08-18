@@ -4,37 +4,39 @@ import {injectable} from 'inversify';
 import {prisma} from '../utils/db.js';
 import Command from './index.js';
 
+/* eslint-disable quote-props */
+
 @injectable()
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('config')
-    .setDescription('configure bot settings')
+    .setDescription('配置機器人設定')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild.toString())
     .addSubcommand(subcommand => subcommand
       .setName('set-playlist-limit')
-      .setDescription('set the maximum number of tracks that can be added from a playlist')
+      .setDescription('設定播放清單可加入的最大歌曲數量')
       .addIntegerOption(option => option
         .setName('limit')
-        .setDescription('maximum number of tracks')
+        .setDescription('最大的歌曲數量')
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('set-wait-after-queue-empties')
-      .setDescription('set the time to wait before leaving the voice channel when queue empties')
+      .setDescription('設定當隊列為空時，離開語音頻道的等待時間')
       .addIntegerOption(option => option
         .setName('delay')
-        .setDescription('delay in seconds (set to 0 to never leave)')
+        .setDescription('以秒為單位的延遲（設定 0 來永不離開）')
         .setRequired(true)
         .setMinValue(0)))
     .addSubcommand(subcommand => subcommand
       .setName('set-leave-if-no-listeners')
-      .setDescription('set whether to leave when all other participants leave')
+      .setDescription('設定所有在語音頻道內的人離開時是否離開')
       .addBooleanOption(option => option
         .setName('value')
-        .setDescription('whether to leave when everyone else leaves')
+        .setDescription('其他人離開時是否離開')
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('get')
-      .setDescription('show all settings'));
+      .setDescription('顯示所有設定'));
 
   async execute(interaction: ChatInputCommandInteraction) {
     switch (interaction.options.getSubcommand()) {
@@ -42,7 +44,7 @@ export default class implements Command {
         const limit: number = interaction.options.getInteger('limit')!;
 
         if (limit < 1) {
-          throw new Error('invalid limit');
+          throw new Error('無效限制');
         }
 
         await prisma.setting.update({
@@ -54,7 +56,7 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 limit updated');
+        await interaction.reply('👍 限制已更新');
 
         break;
       }
@@ -71,7 +73,7 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 wait delay updated');
+        await interaction.reply('👍 等待延遲已更新');
 
         break;
       }
@@ -88,26 +90,26 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 leave setting updated');
+        await interaction.reply('👍 離開設定已更新');
 
         break;
       }
 
       case 'get': {
-        const embed = new EmbedBuilder().setTitle('Config');
+        const embed = new EmbedBuilder().setTitle('配置');
 
         const config = await prisma.setting.findUnique({where: {guildId: interaction.guild!.id}});
 
         if (!config) {
-          throw new Error('no config found');
+          throw new Error('未找到任何配置');
         }
 
         const settingsToShow = {
-          'Playlist Limit': config.playlistLimit,
-          'Wait before leaving after queue empty': config.secondsToWaitAfterQueueEmpties === 0
-            ? 'never leave'
+          '播放清單限制': config.playlistLimit,
+          '隊列空時等待離開延遲': config.secondsToWaitAfterQueueEmpties === 0
+            ? '永不離開'
             : `${config.secondsToWaitAfterQueueEmpties}s`,
-          'Leave if there are no listeners': config.leaveIfNoListeners ? 'yes' : 'no',
+          '當沒有人在聽時離開': config.leaveIfNoListeners ? 'yes' : 'no',
         };
 
         let description = '';

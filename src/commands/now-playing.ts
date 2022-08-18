@@ -10,7 +10,7 @@ import {buildPlayingMessageEmbed} from '../utils/build-embed.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('now-playing')
-    .setDescription('shows the currently played song');
+    .setDescription('顯示目前正在播放的歌');
 
   private readonly playerManager: PlayerManager;
 
@@ -22,7 +22,7 @@ export default class implements Command {
     const player = this.playerManager.get(interaction.guild!.id);
 
     if (!player.getCurrent()) {
-      throw new Error('nothing is currently playing');
+      throw new Error('目前沒有播放任何歌');
     }
 
     await interaction.reply({

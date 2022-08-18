@@ -10,7 +10,7 @@ import Command from '.';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('pause')
-    .setDescription('pause the current song');
+    .setDescription('暫停目前的歌');
 
   public requiresVC = true;
 
@@ -24,10 +24,10 @@ export default class implements Command {
     const player = this.playerManager.get(interaction.guild!.id);
 
     if (player.status !== STATUS.PLAYING) {
-      throw new Error('not currently playing');
+      throw new Error('目前沒有任何正在播的歌');
     }
 
     player.pause();
-    await interaction.reply('the stop-and-go light is now red');
+    await interaction.reply('紅綠燈現在已變成紅燈');
   }
 }

@@ -12,7 +12,7 @@ import {ChatInputCommandInteraction, GuildMember} from 'discord.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('resume')
-    .setDescription('resume playback');
+    .setDescription('恢復播放');
 
   public requiresVC = true;
 
@@ -26,19 +26,19 @@ export default class implements Command {
     const player = this.playerManager.get(interaction.guild!.id);
     const [targetVoiceChannel] = getMemberVoiceChannel(interaction.member as GuildMember) ?? getMostPopularVoiceChannel(interaction.guild!);
     if (player.status === STATUS.PLAYING) {
-      throw new Error('already playing, give me a song name');
+      throw new Error('已經正在播放，請給我一首歌名');
     }
 
     // Must be resuming play
     if (!player.getCurrent()) {
-      throw new Error('nothing to play');
+      throw new Error('沒有東西可恢復');
     }
 
     await player.connect(targetVoiceChannel);
     await player.play();
 
     await interaction.reply({
-      content: 'the stop-and-go light is now green',
+      content: '紅綠燈現在已變成綠燈',
       embeds: [buildPlayingMessageEmbed(player)],
     });
   }

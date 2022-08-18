@@ -9,15 +9,15 @@ import {SlashCommandBuilder} from '@discordjs/builders';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('remove')
-    .setDescription('remove songs from the queue')
+    .setDescription('從隊列中移除歌')
     .addIntegerOption(option =>
       option.setName('position')
-        .setDescription('position of the song to remove [default: 1]')
+        .setDescription('要移除的歌曲位置 [預設: 1]')
         .setRequired(false),
     )
     .addIntegerOption(option =>
       option.setName('range')
-        .setDescription('number of songs to remove [default: 1]')
+        .setDescription('要移除的歌曲數量 [預設: 1]')
         .setRequired(false));
 
   private readonly playerManager: PlayerManager;
@@ -33,15 +33,15 @@ export default class implements Command {
     const range = interaction.options.getInteger('range') ?? 1;
 
     if (position < 1) {
-      throw new Error('position must be at least 1');
+      throw new Error('位置必須至少為 1');
     }
 
     if (range < 1) {
-      throw new Error('range must be at least 1');
+      throw new Error('範圍必須至少為 1');
     }
 
     player.removeFromQueue(position, range);
 
-    await interaction.reply(':wastebasket: removed');
+    await interaction.reply(':wastebasket: 已移除');
   }
 }

@@ -32,7 +32,7 @@ const getQueueInfo = (player: Player) => {
     return '-';
   }
 
-  return queueSize === 1 ? '1 song' : `${queueSize} songs`;
+  return queueSize === 1 ? '1 首歌' : `${queueSize} 首歌`;
 };
 
 const getPlayerUI = (player: Player) => {
@@ -54,20 +54,20 @@ export const buildPlayingMessageEmbed = (player: Player): EmbedBuilder => {
   const currentlyPlaying = player.getCurrent();
 
   if (!currentlyPlaying) {
-    throw new Error('No playing song found');
+    throw new Error('未找到正在播放的歌曲');
   }
 
   const {artist, thumbnailUrl, requestedBy} = currentlyPlaying;
   const message = new EmbedBuilder();
   message
     .setColor(player.status === STATUS.PLAYING ? 'DarkGreen' : 'DarkRed')
-    .setTitle(player.status === STATUS.PLAYING ? 'Now Playing' : 'Paused')
+    .setTitle(player.status === STATUS.PLAYING ? '現在正在播放' : '已暫停')
     .setDescription(`
       **${getSongTitle(currentlyPlaying)}**
-      Requested by: <@${requestedBy}>\n
+      請求者: <@${requestedBy}>\n
       ${getPlayerUI(player)}
     `)
-    .setFooter({text: `Source: ${artist}`});
+    .setFooter({text: `來源: ${artist}`});
 
   if (thumbnailUrl) {
     message.setThumbnail(thumbnailUrl);
@@ -80,14 +80,14 @@ export const buildQueueEmbed = (player: Player, page: number): EmbedBuilder => {
   const currentlyPlaying = player.getCurrent();
 
   if (!currentlyPlaying) {
-    throw new Error('queue is empty');
+    throw new Error('隊列是空的');
   }
 
   const queueSize = player.queueSize();
   const maxQueuePage = Math.ceil((queueSize + 1) / PAGE_SIZE);
 
   if (page > maxQueuePage) {
-    throw new Error('the queue isn\'t that big');
+    throw new Error('隊列並沒有你所想的大');
   }
 
   const queuePageBegin = (page - 1) * PAGE_SIZE;
@@ -97,7 +97,7 @@ export const buildQueueEmbed = (player: Player, page: number): EmbedBuilder => {
     .slice(queuePageBegin, queuePageEnd)
     .map((song, index) => {
       const songNumber = index + 1 + queuePageBegin;
-      const duration = song.isLive ? 'live' : prettyTime(song.length);
+      const duration = song.isLive ? '直播' : prettyTime(song.length);
 
       return `\`${songNumber}.\` ${getSongTitle(song, true)} \`[${duration}]\``;
     })
@@ -110,22 +110,22 @@ export const buildQueueEmbed = (player: Player, page: number): EmbedBuilder => {
   const message = new EmbedBuilder();
 
   let description = `**${getSongTitle(currentlyPlaying)}**\n`;
-  description += `Requested by: <@${requestedBy}>\n\n`;
+  description += `請求者: <@${requestedBy}>\n\n`;
   description += `${getPlayerUI(player)}\n\n`;
 
   if (player.getQueue().length > 0) {
-    description += '**Up next:**\n';
+    description += '**下一首歌:**\n';
     description += queuedSongs;
   }
 
   message
-    .setTitle(player.status === STATUS.PLAYING ? `Now Playing ${player.loopCurrentSong ? '(loop on)' : ''}` : 'Queued songs')
+    .setTitle(player.status === STATUS.PLAYING ? `現在正在播放 ${player.loopCurrentSong ? '(循環啟用中)' : ''}` : '隊列的歌取')
     .setColor(player.status === STATUS.PLAYING ? 'DarkGreen' : 'NotQuiteBlack')
     .setDescription(description)
-    .addFields([{name: 'In queue', value: getQueueInfo(player), inline: true}, {
-      name: 'Total length', value: `${totalLength > 0 ? prettyTime(totalLength) : '-'}`, inline: true,
-    }, {name: 'Page', value: `${page} out of ${maxQueuePage}`, inline: true}])
-    .setFooter({text: `Source: ${artist} ${playlistTitle}`});
+    .addFields([{name: '在隊列中', value: getQueueInfo(player), inline: true}, {
+      name: '總播放長度', value: `${totalLength > 0 ? prettyTime(totalLength) : '-'}`, inline: true,
+    }, {name: '頁面', value: `${maxQueuePage} 中的第 ${page} 頁`, inline: true}])
+    .setFooter({text: `來源: ${artist} ${playlistTitle}`});
 
   if (thumbnailUrl) {
     message.setThumbnail(thumbnailUrl);

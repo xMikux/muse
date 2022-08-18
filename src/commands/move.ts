@@ -9,15 +9,15 @@ import {SlashCommandBuilder} from '@discordjs/builders';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('move')
-    .setDescription('move songs within the queue')
+    .setDescription('在隊列中移動歌曲')
     .addIntegerOption(option =>
       option.setName('from')
-        .setDescription('position of the song to move')
+        .setDescription('要移動的歌曲位置')
         .setRequired(true),
     )
     .addIntegerOption(option =>
       option.setName('to')
-        .setDescription('position to move the song to')
+        .setDescription('歌曲移動到的位置')
         .setRequired(true));
 
   private readonly playerManager: PlayerManager;
@@ -33,15 +33,15 @@ export default class implements Command {
     const to = interaction.options.getInteger('to') ?? 1;
 
     if (from < 1) {
-      throw new Error('position must be at least 1');
+      throw new Error('位置必須至少為 1');
     }
 
     if (to < 1) {
-      throw new Error('position must be at least 1');
+      throw new Error('位置必須至少為 1');
     }
 
     const {title} = player.move(from, to);
 
-    await interaction.reply('moved **' + title + '** to position **' + String(to) + '**');
+    await interaction.reply('已移動 **' + title + '** 到位置 **' + String(to) + '**');
   }
 }

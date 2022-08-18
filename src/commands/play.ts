@@ -15,21 +15,21 @@ import AddQueryToQueue from '../services/add-query-to-queue.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('play')
-    .setDescription('play a song')
+    .setDescription('播放一首歌')
     .addStringOption(option => option
       .setName('query')
-      .setDescription('YouTube URL, Spotify URL, or search query')
+      .setDescription('YouTube 網址、Spotify 網址，或是搜尋')
       .setAutocomplete(true)
       .setRequired(true))
     .addBooleanOption(option => option
       .setName('immediate')
-      .setDescription('add track to the front of the queue'))
+      .setDescription('將添加的歌曲到隊列的最前面'))
     .addBooleanOption(option => option
       .setName('shuffle')
-      .setDescription('shuffle the input if you\'re adding multiple tracks'))
+      .setDescription('如果你添加多個歌曲，可以隨機播放所添加的歌曲'))
     .addBooleanOption(option => option
       .setName('split')
-      .setDescription('if a track has chapters, split it'));
+      .setDescription('如果歌曲有章節，則將它拆分'));
 
   public requiresVC = true;
 

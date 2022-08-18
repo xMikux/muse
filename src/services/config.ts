@@ -21,7 +21,7 @@ const CONFIG_MAP = {
   BOT_STATUS: process.env.BOT_STATUS ?? 'online',
   BOT_ACTIVITY_TYPE: process.env.BOT_ACTIVITY_TYPE ?? 'LISTENING',
   BOT_ACTIVITY_URL: process.env.BOT_ACTIVITY_URL ?? '',
-  BOT_ACTIVITY: process.env.BOT_ACTIVITY ?? 'music',
+  BOT_ACTIVITY: process.env.BOT_ACTIVITY ?? '音樂',
 } as const;
 
 const BOT_ACTIVITY_TYPE_MAP = {
@@ -49,7 +49,7 @@ export default class Config {
   constructor() {
     for (const [key, value] of Object.entries(CONFIG_MAP)) {
       if (typeof value === 'undefined') {
-        console.error(`Missing environment variable for ${key}`);
+        console.error(`缺失 ${key} 環境變數`);
         process.exit(1);
       }
 
