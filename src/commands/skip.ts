@@ -36,7 +36,7 @@ export default class implements Command {
     try {
       await player.forward(numToSkip);
       await interaction.reply({
-        content: '讓它繼續播放',
+        content: '讓我們繼續到下一首',
         embeds: player.getCurrent() ? [buildPlayingMessageEmbed(player)] : [],
       });
     } catch (_: unknown) {

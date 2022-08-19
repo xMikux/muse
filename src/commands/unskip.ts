@@ -26,7 +26,7 @@ export default class implements Command {
     try {
       await player.back();
       await interaction.reply({
-        content: '讓它回來',
+        content: '讓我們回到上一首',
         embeds: player.getCurrent() ? [buildPlayingMessageEmbed(player)] : [],
       });
     } catch (_: unknown) {
