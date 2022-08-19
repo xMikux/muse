@@ -5,6 +5,11 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "src"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "package.json"
 
 jobs:
   Docker:
