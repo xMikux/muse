@@ -45,7 +45,7 @@ const getPlayerUI = (player: Player) => {
   const position = player.getPosition();
   const button = player.status === STATUS.PLAYING ? '⏹️' : '▶️';
   const progressBar = getProgressBar(15, position / song.length);
-  const elapsedTime = song.isLive ? 'live' : `${prettyTime(position)}/${prettyTime(song.length)}`;
+  const elapsedTime = song.isLive ? '直播' : `${prettyTime(position)}/${prettyTime(song.length)}`;
   const loop = player.loopCurrentSong ? '🔁' : '';
   return `${button} ${progressBar} \`[${elapsedTime}]\` 🔉 ${loop}`;
 };
