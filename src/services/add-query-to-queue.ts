@@ -165,9 +165,9 @@ export default class AddQueryToQueue {
     }
 
     if (newSongs.length === 1) {
-      await interaction.editReply(`當然好, **${firstSong.title}** 添加到 ${addToFrontOfQueue ? ' 最前面的' : ''} 隊列${extraMsg}`);
+      await interaction.editReply(`當然好，**${firstSong.title}** 添加到${addToFrontOfQueue ? '最前面的' : ''}隊列${extraMsg}`);
     } else {
-      await interaction.editReply(`當然好, **${firstSong.title}** 和 ${newSongs.length - 1} 首其他歌曲已添加到隊列中 ${extraMsg}`);
+      await interaction.editReply(`當然好，**${firstSong.title}** 和 ${newSongs.length - 1} 首其他歌曲已添加到隊列中 ${extraMsg}`);
     }
   }
 }

@@ -124,7 +124,7 @@ export const buildQueueEmbed = (player: Player, page: number): EmbedBuilder => {
     .setDescription(description)
     .addFields([{name: '在隊列中', value: getQueueInfo(player), inline: true}, {
       name: '總播放長度', value: `${totalLength > 0 ? prettyTime(totalLength) : '-'}`, inline: true,
-    }, {name: '頁面', value: `${maxQueuePage} 中的第 ${page} 頁`, inline: true}])
+    }, {name: '頁面', value: `${maxQueuePage} 頁中的第 ${page} 頁`, inline: true}])
     .setFooter({text: `來源: ${artist} ${playlistTitle}`});
 
   if (thumbnailUrl) {
