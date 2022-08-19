@@ -113,7 +113,7 @@
     "sync-fetch": "^0.3.1",
     "xbytes": "^1.7.0",
     "youtube.ts": "^0.2.9",
-    "ytdl-core": "^4.11.0",
+    "ytdl-core": "github:GreepTheSheep/node-ytdl-core",
     "ytsr": "^3.8.0"
   }
 }
