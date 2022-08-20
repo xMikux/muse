@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.4] - 2022-08-19
+### Fixed
+- Switch from emso to [tsx](https://github.com/esbuild-kit/tsx) to fix ESM loader bug with recent Node.js versions
 ## [2.1.3] - 2022-08-08
 ### Fixed
 - Cache files are now correctly created
@@ -192,7 +195,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[unreleased]: https://github.com/codetheweb/muse/compare/v2.1.3...HEAD
+[unreleased]: https://github.com/codetheweb/muse/compare/v2.1.4...HEAD
+[2.1.4]: https://github.com/codetheweb/muse/compare/v2.1.3...v2.1.4
 [2.1.3]: https://github.com/codetheweb/muse/compare/v2.1.2...v2.1.3
 [2.1.2]: https://github.com/codetheweb/muse/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/codetheweb/muse/compare/v2.1.0...v2.1.1
