@@ -32,6 +32,6 @@ export default class implements Command {
     }
 
     player.stop();
-    await interaction.reply('當然好');
+    await interaction.reply('當然好，已停止播放');
   }
 }

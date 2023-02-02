@@ -28,6 +28,6 @@ export default class implements Command {
 
     player.disconnect();
 
-    await interaction.reply('當然好');
+    await interaction.reply('當然好，已中斷連線');
   }
 }
