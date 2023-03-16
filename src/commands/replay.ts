@@ -9,7 +9,7 @@ import {SlashCommandBuilder} from '@discordjs/builders';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('replay')
-    .setDescription('replay the current song');
+    .setDescription('重新播放目前的歌曲');
 
   public requiresVC = true;
 
