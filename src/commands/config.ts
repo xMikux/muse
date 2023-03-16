@@ -3,6 +3,7 @@ import {ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits} from 'di
 import {injectable} from 'inversify';
 import {prisma} from '../utils/db.js';
 import Command from './index.js';
+import {getGuildSettings} from '../utils/get-guild-settings';
 
 /* eslint-disable quote-props */
 
@@ -98,11 +99,7 @@ export default class implements Command {
       case 'get': {
         const embed = new EmbedBuilder().setTitle('配置');
 
-        const config = await prisma.setting.findUnique({where: {guildId: interaction.guild!.id}});
-
-        if (!config) {
-          throw new Error('未找到任何配置');
-        }
+        const config = await getGuildSettings(interaction.guild!.id);
 
         const settingsToShow = {
           '播放清單限制': config.playlistLimit,
