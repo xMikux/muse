@@ -95,7 +95,7 @@ export default class {
     }
 
     if (!firstVideo) {
-      throw new Error('No video found.');
+      throw new Error('未找到影片。');
     }
 
     return this.getVideo(firstVideo.url, shouldSplitChapters);
@@ -106,7 +106,7 @@ export default class {
     const video = result.at(0);
 
     if (!video) {
-      throw new Error('Video could not be found.');
+      throw new Error('找不到影片。');
     }
 
     return this.getMetadataFromVideo({video, shouldSplitChapters});
@@ -130,7 +130,7 @@ export default class {
     const playlist = playlists.at(0)!;
 
     if (!playlist) {
-      throw new Error('Playlist could not be found.');
+      throw new Error('找不到播放清單。');
     }
 
     const playlistVideos: PlaylistItem[] = [];
