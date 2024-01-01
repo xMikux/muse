@@ -1,6 +1,6 @@
 {
   "name": "muse",
-  "version": "2.4.3",
+  "version": "2.4.4",
   "description": "🎧 a self-hosted Discord music bot that doesn't suck ",
   "repository": "git@github.com:codetheweb/muse.git",
   "author": "Max Isom <hi@maxisom.me>",
@@ -26,7 +26,8 @@
     "migrations:run": "npm run prisma:with-env migrate deploy",
     "prisma:with-env": "npm run env:set-database-url prisma",
     "env:set-database-url": "tsx src/scripts/run-with-database-url.ts",
-    "release": "release-it"
+    "release": "release-it",
+    "build": "tsc"
   },
   "devDependencies": {
     "@release-it/keep-a-changelog": "^2.3.0",
