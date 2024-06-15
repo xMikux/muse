@@ -103,6 +103,11 @@ services:
 
 預設情況下，Muse 將總緩存大小限制在 2GB 左右。如果你想要變更這個，請設定環境變數 `CACHE_LIMIT`。例如，`CACHE_LIMIT=512MB` 或 `CACHE_LIMIT=10GB`。
 
+### SponsorBlock
+
+Muse can skip non-music segments at the beginning or end of a Youtube music video (Using [SponsorBlock](https://sponsor.ajay.app/)). It is disabled by default. If you want to enable it, set the environment variable `ENABLE_SPONSORBLOCK=true` or uncomment it in your .env.
+Being a community project, the server may be down or overloaded. When it happen, Muse will skip requests to SponsorBlock for a few minutes. You can change the skip duration by setting the value of `SPONSORBLOCK_TIMEOUT`.
+
 ### 自訂機器人狀態
 
 預設狀態下，Muse 會有狀態 "線上" 和文字訊息 "正在聽 音樂"。你可以透過更改環境變數來更改狀態：
