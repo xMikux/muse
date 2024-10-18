@@ -9,7 +9,7 @@ import Command from './index.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('clear')
-    .setDescription('清除了所有在隊列中的歌曲，除了正在播放的歌');
+    .setDescription('清除所有在隊列中的歌曲，除了正在播放的歌');
 
   public requiresVC = true;
 

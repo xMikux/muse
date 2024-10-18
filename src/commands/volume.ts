@@ -9,10 +9,10 @@ import {SlashCommandBuilder} from '@discordjs/builders';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('volume')
-    .setDescription('set current player volume level')
+    .setDescription('設定播放音量等級')
     .addIntegerOption(option =>
       option.setName('level')
-        .setDescription('volume percentage (0 is muted, 100 is max & default)')
+        .setDescription('音量大小（0 為靜音，100 為最大、同時是預設值）')
         .setMinValue(0)
         .setMaxValue(100)
         .setRequired(true),
@@ -32,11 +32,11 @@ export default class implements Command {
     const currentSong = player.getCurrent();
 
     if (!currentSong) {
-      throw new Error('nothing is playing');
+      throw new Error('沒有歌曲播放中');
     }
 
     const level = interaction.options.getInteger('level') ?? 100;
     player.setVolume(level);
-    await interaction.reply(`Set volume to ${level}%`);
+    await interaction.reply(`設定音量為 ${level}%`);
   }
 }

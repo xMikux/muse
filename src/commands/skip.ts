@@ -13,7 +13,7 @@ export default class implements Command {
     .setDescription('跳過並到下一首歌')
     .addIntegerOption(option => option
       .setName('number')
-      .setDescription('要跳過的歌曲數量 [預設: 1]')
+      .setDescription('要跳過的歌曲數量 [預設：1]')
       .setRequired(false));
 
   public requiresVC = true;

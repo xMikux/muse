@@ -11,14 +11,14 @@ import {getGuildSettings} from '../utils/get-guild-settings.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('config')
-    .setDescription('配置機器人設定')
+    .setDescription('設定機器人')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild.toString())
     .addSubcommand(subcommand => subcommand
       .setName('set-playlist-limit')
       .setDescription('設定播放清單可加入的最大歌曲數量')
       .addIntegerOption(option => option
         .setName('limit')
-        .setDescription('最大的歌曲數量')
+        .setDescription('最大歌曲數量')
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('set-wait-after-queue-empties')
@@ -30,7 +30,7 @@ export default class implements Command {
         .setMinValue(0)))
     .addSubcommand(subcommand => subcommand
       .setName('set-leave-if-no-listeners')
-      .setDescription('設定所有在語音頻道內的人離開時是否離開')
+      .setDescription('當所有聽眾離開時，是否繼續留在語音頻道')
       .addBooleanOption(option => option
         .setName('value')
         .setDescription('其他人離開時是否離開')
@@ -44,17 +44,17 @@ export default class implements Command {
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('set-auto-announce-next-song')
-      .setDescription('set whether to announce the next song in the queue automatically')
+      .setDescription('設定是否自動發送下首歌訊息')
       .addBooleanOption(option => option
         .setName('value')
-        .setDescription('whether to announce the next song in the queue automatically')
+        .setDescription('是否自動發送隊列中下首歌的訊息')
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('set-default-volume')
-      .setDescription('set default volume used when entering the voice channel')
+      .setDescription('設定預設加入語音頻道的音量大小')
       .addIntegerOption(option => option
         .setName('level')
-        .setDescription('volume percentage (0 is muted, 100 is max & default)')
+        .setDescription('音量大小（0 為靜音，100 為最大、同時為預設值）')
         .setMinValue(0)
         .setMaxValue(100)
         .setRequired(true)))
@@ -202,7 +202,7 @@ export default class implements Command {
       }
 
       default:
-        throw new Error('unknown subcommand');
+        throw new Error('未知的子指令');
     }
   }
 }
