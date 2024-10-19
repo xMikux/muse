@@ -1,8 +1,10 @@
 <p align="center">
-  <img width="250" height="250" src="https://raw.githubusercontent.com/codetheweb/muse/master/.github/logo.png">
+  <img width="250" height="250" src="https://raw.githubusercontent.com/museofficial/muse/master/.github/logo.png">
 </p>
 
-🚨: v1.0.0 was a breaking change. Please take a look at the [release notes](https://github.com/codetheweb/muse/releases/tag/v1.0.0) for upgrade instructions
+> [!WARNING]
+> 我 ([@codetheweb](https://github.com/codetheweb)) 已經不是 Muse 的要維護者。 **如果你使用的是 Docker Image，請更新你的來源至 `ghcr.io/museofficial/muse`。** 我們目前仍然在同時發布 `ghcr.io/museofficial/muse` 和 `codetheweb/muse`，但未來可能有所改變。
+> 感謝所有人幫助維護 Muse！
 
 UnOfficial Fork, this is **Traditional Chinese** Translation Version!
 
@@ -45,6 +47,7 @@ Muse 在運行時將會顯示 URL 在記錄中。在瀏覽器中打開 URL 來�
 ### 版本號
 
 `master` 分支為 開發分支，不能保證穩定。
+When running a production instance, I recommend that you use the [latest release](https://github.com/museofficial/muse/releases/).
 
 當你正在運行一個生產實例環境，我推薦你使用[最新發布版](https://github.com/codetheweb/muse/releases/)。
 
@@ -60,7 +63,7 @@ Muse 在運行時將會顯示 URL 在記錄中。在瀏覽器中打開 URL 來�
 （用正確的值替換空的設定字串。）
 
 ```bash
-docker run -it -v "$(pwd)/data":/data -e DISCORD_TOKEN='' -e SPOTIFY_CLIENT_ID='' -e SPOTIFY_CLIENT_SECRET='' -e YOUTUBE_API_KEY='' ghcr.io/xmikux/muse:latest
+docker run -it -v "$(pwd)/data":/data -e DISCORD_TOKEN='' -e SPOTIFY_CLIENT_ID='' -e SPOTIFY_CLIENT_SECRET='' -e YOUTUBE_API_KEY='' ghcr.io/museofficial/muse:latest
 ```
 
 這會啟動 Muse，並創建一個 data 資料夾在你目前的資料夾位置。
@@ -72,7 +75,7 @@ version: '3.4'
 
 services:
   muse:
-    image: ghcr.io/xmikux/muse:latest
+    image: ghcr.io/museofficial/muse:latest
     restart: always
     volumes:
       - ./muse:/data
@@ -85,17 +88,17 @@ services:
 
 ### Node.js
 
-**先決條件**:
-* Node.js (推薦使用 16.x，因為它是目前的 LTS 版本)
-* ffmpeg (4.1 或更新)
+**Prerequisites**:
+* Node.js (18.17.0 or later is required and latest 18.x.x LTS is recommended)
+* ffmpeg (4.1 or later)
 
-1. `git clone https://github.com/codetheweb/muse.git && cd muse`
-2. 複製 `.env.example` 到 `.env` 並填寫變數
-3. 我推薦到已經有版本號的發布版分支 `git checkout v[最新發布版]`
-4. `yarn install` (或 `npm i`)
-5. `yarn start` (或 `npm run start`)
+1. `git clone https://github.com/museofficial/muse.git && cd muse`
+2. Copy `.env.example` to `.env` and populate with values
+3. I recommend checking out a tagged release with `git checkout v[latest release]`
+4. `yarn install` (or `npm i`)
+5. `yarn start` (or `npm run start`)
 
-**備註**: 如果你使用的是 Windows，你可能需要手動指定 ffmpeg 的路徑。查看 [#345](https://github.com/codetheweb/muse/issues/345) 來獲取更多詳情。
+**Note**: if you're on Windows, you may need to manually set the ffmpeg path. See [#345](https://github.com/museofficial/muse/issues/345) for details.
 
 ## ⚙️ 附加配置選項 (進階)
 

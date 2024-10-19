@@ -9,15 +9,15 @@ import {SlashCommandBuilder} from '@discordjs/builders';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('remove')
-    .setDescription('從隊列中移除歌')
+    .setDescription('從佇列中移除歌曲')
     .addIntegerOption(option =>
       option.setName('position')
-        .setDescription('要移除的歌曲位置 [預設: 1]')
+        .setDescription('要移除的歌曲位置 [預設：1]')
         .setRequired(false),
     )
     .addIntegerOption(option =>
       option.setName('range')
-        .setDescription('要移除的歌曲數量 [預設: 1]')
+        .setDescription('要移除的歌曲數量 [預設：1]')
         .setRequired(false));
 
   private readonly playerManager: PlayerManager;

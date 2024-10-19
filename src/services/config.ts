@@ -53,7 +53,7 @@ export default class Config {
   constructor() {
     for (const [key, value] of Object.entries(CONFIG_MAP)) {
       if (typeof value === 'undefined') {
-        console.error(`缺失 ${key} 環境變數`);
+        console.error(`缺少 ${key} 環境變數`);
         process.exit(1);
       }
 

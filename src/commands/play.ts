@@ -15,21 +15,24 @@ import AddQueryToQueue from '../services/add-query-to-queue.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('play')
-    .setDescription('播放一首歌')
+    .setDescription('播放一首歌曲')
     .addStringOption(option => option
       .setName('query')
-      .setDescription('YouTube 網址、Spotify 網址，或是搜尋')
+      .setDescription('YouTube 連結、Spotify 連結，或搜尋關鍵字')
       .setAutocomplete(true)
       .setRequired(true))
     .addBooleanOption(option => option
       .setName('immediate')
-      .setDescription('將添加的歌曲到隊列的最前面'))
+      .setDescription('將歌曲加入佇列最前面'))
     .addBooleanOption(option => option
       .setName('shuffle')
-      .setDescription('如果你添加多個歌曲，可以隨機播放所添加的歌曲'))
+      .setDescription('如果你要加入多首歌曲，則會隨機播放這些歌曲'))
     .addBooleanOption(option => option
       .setName('split')
-      .setDescription('如果歌曲有章節，則將它拆分'));
+      .setDescription('如果歌曲有章節，則將其分割成單獨歌曲'))
+    .addBooleanOption(option => option
+      .setName('skip')
+      .setDescription('跳過目前正在播放的歌曲'));
 
   public requiresVC = true;
 
@@ -52,6 +55,7 @@ export default class implements Command {
       addToFrontOfQueue: interaction.options.getBoolean('immediate') ?? false,
       shuffleAdditions: interaction.options.getBoolean('shuffle') ?? false,
       shouldSplitChapters: interaction.options.getBoolean('split') ?? false,
+      skipCurrentTrack: interaction.options.getBoolean('skip') ?? false,
     });
   }
 

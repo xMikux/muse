@@ -5,15 +5,22 @@ import {TYPES} from '../types.js';
 import PlayerManager from '../managers/player.js';
 import Command from './index.js';
 import {buildQueueEmbed} from '../utils/build-embed.js';
+import {getGuildSettings} from '../utils/get-guild-settings.js';
 
 @injectable()
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('queue')
-    .setDescription('顯示目前的歌曲隊列')
+    .setDescription('顯示目前的歌曲佇列')
     .addIntegerOption(option => option
       .setName('page')
-      .setDescription('要顯示的隊列頁目 [預設: 1]')
+      .setDescription('顯示佇列的頁數 [預設：1]')
+      .setRequired(false))
+    .addIntegerOption(option => option
+      .setName('page-size')
+      .setDescription('每頁顯示的項目數量 [預設：10，最大：30]')
+      .setMinValue(1)
+      .setMaxValue(30)
       .setRequired(false));
 
   private readonly playerManager: PlayerManager;
@@ -23,9 +30,17 @@ export default class implements Command {
   }
 
   public async execute(interaction: ChatInputCommandInteraction) {
-    const player = this.playerManager.get(interaction.guild!.id);
+    const guildId = interaction.guild!.id;
+    const player = this.playerManager.get(guildId);
 
-    const embed = buildQueueEmbed(player, interaction.options.getInteger('page') ?? 1);
+    const pageSizeFromOptions = interaction.options.getInteger('page-size');
+    const pageSize = pageSizeFromOptions ?? (await getGuildSettings(guildId)).defaultQueuePageSize;
+
+    const embed = buildQueueEmbed(
+      player,
+      interaction.options.getInteger('page') ?? 1,
+      pageSize,
+    );
 
     await interaction.reply({embeds: [embed]});
   }

@@ -9,7 +9,7 @@ import Command from './index.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('disconnect')
-    .setDescription('暫停歌曲並中斷 Muse 的連線');
+    .setDescription('暫停歌曲並中斷 Muse 連線');
 
   public requiresVC = true;
 

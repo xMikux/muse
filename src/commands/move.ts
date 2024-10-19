@@ -9,15 +9,15 @@ import {SlashCommandBuilder} from '@discordjs/builders';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('move')
-    .setDescription('在隊列中移動歌曲')
+    .setDescription('在佇列中移動歌曲')
     .addIntegerOption(option =>
       option.setName('from')
-        .setDescription('要移動的歌曲位置')
+        .setDescription('要移動的歌曲的位置')
         .setRequired(true),
     )
     .addIntegerOption(option =>
       option.setName('to')
-        .setDescription('歌曲移動到的位置')
+        .setDescription('將歌曲移動到的位置')
         .setRequired(true));
 
   private readonly playerManager: PlayerManager;

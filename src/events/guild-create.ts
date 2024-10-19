@@ -40,5 +40,5 @@ export default async (guild: Guild): Promise<void> => {
   }
 
   const owner = await guild.fetchOwner();
-  await owner.send('👋 你好！有人（可能是你）剛剛邀請我到你所擁有的伺服器。預設情況下，所有伺服器成員可以在所有頻道中使用我的指令。要改變這點，請查看有關權限的維基頁面：https://github.com/codetheweb/muse/wiki/Configuring-Bot-Permissions.');
+  await owner.send('👋 嗨！有人（可能是你）剛剛邀請我加入你所擁有的伺服器。預設情況下，所有伺服器成員可以在所在頻道使用，如我你想要改這個設定，可以參考這關於權限設定的 Wiki：https://github.com/museofficial/muse/wiki/Configuring-Bot-Permissions');
 };

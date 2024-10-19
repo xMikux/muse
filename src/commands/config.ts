@@ -15,48 +15,57 @@ export default class implements Command {
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild.toString())
     .addSubcommand(subcommand => subcommand
       .setName('set-playlist-limit')
-      .setDescription('設定播放清單可加入的最大歌曲數量')
+      .setDescription('設定從播放清單中新增的歌曲的最大數量')
       .addIntegerOption(option => option
         .setName('limit')
         .setDescription('最大歌曲數量')
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('set-wait-after-queue-empties')
-      .setDescription('設定當隊列為空時，離開語音頻道的等待時間')
+      .setDescription('設定佇列清空後等待離開語音頻道的時間')
       .addIntegerOption(option => option
         .setName('delay')
-        .setDescription('以秒為單位的延遲（設定 0 來永不離開）')
+        .setDescription('延遲秒數（設定為 0 表示永不離開）')
         .setRequired(true)
         .setMinValue(0)))
     .addSubcommand(subcommand => subcommand
       .setName('set-leave-if-no-listeners')
-      .setDescription('當所有聽眾離開時，是否繼續留在語音頻道')
+      .setDescription('設定無聽眾時離開')
       .addBooleanOption(option => option
         .setName('value')
-        .setDescription('其他人離開時是否離開')
+        .setDescription('是否在無聽眾時離開')
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('set-queue-add-response-hidden')
-      .setDescription('set whether bot responses to queue additions are only displayed to the requester')
+      .setDescription('設定佇列新增回應隱藏')
       .addBooleanOption(option => option
         .setName('value')
-        .setDescription('whether bot responses to queue additions are only displayed to the requester')
+        .setDescription('是否僅向請求者顯示機器人對佇列新增的回應')
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('set-auto-announce-next-song')
-      .setDescription('設定是否自動發送下首歌訊息')
+      .setDescription('設定自動宣佈下一首歌曲')
       .addBooleanOption(option => option
         .setName('value')
-        .setDescription('是否自動發送隊列中下首歌的訊息')
+        .setDescription('是否自動宣佈佇列中的下一首歌曲')
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('set-default-volume')
-      .setDescription('設定預設加入語音頻道的音量大小')
+      .setDescription('設定預設進入語音頻道使用的音量')
       .addIntegerOption(option => option
         .setName('level')
-        .setDescription('音量大小（0 為靜音，100 為最大、同時為預設值）')
+        .setDescription('音量百分比（0 為靜音，100 為最大值和預設值）')
         .setMinValue(0)
         .setMaxValue(100)
+        .setRequired(true)))
+    .addSubcommand(subcommand => subcommand
+      .setName('set-default-queue-page-size')
+      .setDescription('設定 /queue 指令的預設頁面大小')
+      .addIntegerOption(option => option
+        .setName('page-size')
+        .setDescription('/queue 指令的頁面大小')
+        .setMinValue(1)
+        .setMaxValue(30)
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('get')
@@ -134,7 +143,7 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 queue add notification setting updated');
+        await interaction.reply('👍 佇列新增通知設定已更新');
 
         break;
       }
@@ -151,7 +160,7 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 auto announce setting updated');
+        await interaction.reply('👍 自動宣佈設定已更新');
 
         break;
       }
@@ -168,25 +177,43 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 volume setting updated');
+        await interaction.reply('👍 音量設定已更新');
+
+        break;
+      }
+
+      case 'set-default-queue-page-size': {
+        const value = interaction.options.getInteger('page-size')!;
+
+        await prisma.setting.update({
+          where: {
+            guildId: interaction.guild!.id,
+          },
+          data: {
+            defaultQueuePageSize: value,
+          },
+        });
+
+        await interaction.reply('👍 預設佇列頁面大小已更新');
 
         break;
       }
 
       case 'get': {
-        const embed = new EmbedBuilder().setTitle('配置');
+        const embed = new EmbedBuilder().setTitle('設定');
 
         const config = await getGuildSettings(interaction.guild!.id);
 
         const settingsToShow = {
           '播放清單限制': config.playlistLimit,
-          '隊列空時等待離開延遲': config.secondsToWaitAfterQueueEmpties === 0
+          '佇列清空後等待離開時間': config.secondsToWaitAfterQueueEmpties === 0
             ? '永不離開'
             : `${config.secondsToWaitAfterQueueEmpties}s`,
-          'Leave if there are no listeners': config.leaveIfNoListeners ? 'yes' : 'no',
-          'Auto announce next song in queue': config.autoAnnounceNextSong ? 'yes' : 'no',
-          'Add to queue reponses show for requester only': config.autoAnnounceNextSong ? 'yes' : 'no',
-          'Default Volume': config.defaultVolume,
+          '無聽眾時離開': config.leaveIfNoListeners ? 'yes' : 'no',
+          '自動宣佈佇列中的下一首歌曲': config.autoAnnounceNextSong ? 'yes' : 'no',
+          '佇列新增回覆僅顯示給請求者': config.autoAnnounceNextSong ? 'yes' : 'no',
+          '預設音量': config.defaultVolume,
+          '預設佇列頁面大小': config.defaultQueuePageSize,
         };
 
         let description = '';
@@ -202,7 +229,7 @@ export default class implements Command {
       }
 
       default:
-        throw new Error('未知的子指令');
+        throw new Error('未知子指令');
     }
   }
 }

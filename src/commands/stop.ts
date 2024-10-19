@@ -10,7 +10,7 @@ import Command from './index.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('stop')
-    .setDescription('停止播放，並中斷連線與清除所有在隊列中的歌曲');
+    .setDescription('停止播放，中斷連線並清空佇列中所有歌曲');
 
   public requiresVC = true;
 
@@ -28,7 +28,7 @@ export default class implements Command {
     }
 
     if (player.status !== STATUS.PLAYING) {
-      throw new Error('目前未正在播放');
+      throw new Error('目前沒有播放任何內容');
     }
 
     player.stop();

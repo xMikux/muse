@@ -155,7 +155,7 @@ export default class {
         status: this.config.BOT_STATUS,
       });
 
-      spinner.succeed(`就緒！ 邀請機器人： https://discordapp.com/oauth2/authorize?client_id=${this.client.user?.id ?? ''}&scope=bot%20applications.commands&permissions=36700160`);
+      spinner.succeed(`就緒！邀請機器人：https://discordapp.com/oauth2/authorize?client_id=${this.client.user?.id ?? ''}&scope=bot%20applications.commands&permissions=36700160`);
     });
 
     this.client.on('error', console.error);

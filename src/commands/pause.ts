@@ -10,7 +10,7 @@ import Command from './index.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('pause')
-    .setDescription('暫停目前的歌');
+    .setDescription('暫停目前歌曲');
 
   public requiresVC = true;
 
@@ -24,7 +24,7 @@ export default class implements Command {
     const player = this.playerManager.get(interaction.guild!.id);
 
     if (player.status !== STATUS.PLAYING) {
-      throw new Error('目前沒有任何正在播的歌');
+      throw new Error('目前沒有播放任何內容');
     }
 
     player.pause();

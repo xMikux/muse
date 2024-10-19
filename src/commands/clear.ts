@@ -9,7 +9,7 @@ import Command from './index.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('clear')
-    .setDescription('清除所有在隊列中的歌曲，除了正在播放的歌');
+    .setDescription('清除佇列中所有歌曲，除了目前正在播放的歌曲');
 
   public requiresVC = true;
 
@@ -22,6 +22,6 @@ export default class implements Command {
   public async execute(interaction: ChatInputCommandInteraction) {
     this.playerManager.get(interaction.guild!.id).clear();
 
-    await interaction.reply('清理的比收割過後的田地還要乾淨');
+    await interaction.reply('比剛收割過的田地還要乾淨');
   }
 }

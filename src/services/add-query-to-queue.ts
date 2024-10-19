@@ -38,12 +38,14 @@ export default class AddQueryToQueue {
     addToFrontOfQueue,
     shuffleAdditions,
     shouldSplitChapters,
+    skipCurrentTrack,
     interaction,
   }: {
     query: string;
     addToFrontOfQueue: boolean;
     shuffleAdditions: boolean;
     shouldSplitChapters: boolean;
+    skipCurrentTrack: boolean;
     interaction: ChatInputCommandInteraction;
   }): Promise<void> {
     const guildId = interaction.guild!.id;
@@ -100,9 +102,9 @@ export default class AddQueryToQueue {
 
         if (nSongsNotFound !== 0) {
           if (nSongsNotFound === 1) {
-            extraMsg += '未找到 1 首歌';
+            extraMsg += '未找到 1 首歌曲';
           } else {
-            extraMsg += `${nSongsNotFound.toString()} 首歌未找到`;
+            extraMsg += `${nSongsNotFound.toString()} 首歌曲未找到`;
           }
         }
 
@@ -158,7 +160,7 @@ export default class AddQueryToQueue {
       await player.play();
 
       if (wasPlayingSong) {
-        statusMsg = '恢復播放';
+        statusMsg = '繼續播放';
       }
 
       await interaction.editReply({
@@ -167,6 +169,14 @@ export default class AddQueryToQueue {
     } else if (player.status === STATUS.IDLE) {
       // Player is idle, start playback instead
       await player.play();
+    }
+
+    if (skipCurrentTrack) {
+      try {
+        await player.forward(1);
+      } catch (_: unknown) {
+        throw new Error('沒有歌曲可跳過');
+      }
     }
 
     // Build response message
@@ -183,9 +193,9 @@ export default class AddQueryToQueue {
     }
 
     if (newSongs.length === 1) {
-      await interaction.editReply(`當然好，**${firstSong.title}** 添加到${addToFrontOfQueue ? '最前面的' : ''}隊列${extraMsg}`);
+      await interaction.editReply(`當然好，**${firstSong.title}** 已加入${addToFrontOfQueue ? ' 佇列最前面' : ''} 佇列${skipCurrentTrack ? '並且跳過目前的曲目' : ''}${extraMsg}`);
     } else {
-      await interaction.editReply(`當然好，**${firstSong.title}** 和 ${newSongs.length - 1} 首其他歌曲已添加到隊列中 ${extraMsg}`);
+      await interaction.editReply(`當然好，**${firstSong.title}** 和 ${newSongs.length - 1} 首歌曲已加入佇列${skipCurrentTrack ? '並且跳過目前的曲目' : ''}${extraMsg}`);
     }
   }
 

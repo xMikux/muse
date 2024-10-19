@@ -10,7 +10,7 @@ import {buildPlayingMessageEmbed} from '../utils/build-embed.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('skip')
-    .setDescription('跳過並到下一首歌')
+    .setDescription('跳過下一首或多首歌曲')
     .addIntegerOption(option => option
       .setName('number')
       .setDescription('要跳過的歌曲數量 [預設：1]')
@@ -40,7 +40,7 @@ export default class implements Command {
         embeds: player.getCurrent() ? [buildPlayingMessageEmbed(player)] : [],
       });
     } catch (_: unknown) {
-      throw new Error('沒有可跳過到的歌曲');
+      throw new Error('沒有歌曲可以跳過');
     }
   }
 }

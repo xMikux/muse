@@ -9,7 +9,7 @@ import {SlashCommandBuilder} from '@discordjs/builders';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('shuffle')
-    .setDescription('隨機化目前的隊列');
+    .setDescription('隨機播放目前的佇列');
 
   public requiresVC = true;
 
@@ -23,7 +23,7 @@ export default class implements Command {
     const player = this.playerManager.get(interaction.guild!.id);
 
     if (player.isQueueEmpty()) {
-      throw new Error('沒有足夠的歌可以隨機');
+      throw new Error('沒有足夠的歌曲可以隨機播放');
     }
 
     player.shuffle();

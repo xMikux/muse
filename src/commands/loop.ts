@@ -10,7 +10,7 @@ import {STATUS} from '../services/player.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('loop')
-    .setDescription('切換歌曲的循環播放');
+    .setDescription('切換循環目前歌曲');
 
   public requiresVC = true;
 
@@ -24,7 +24,7 @@ export default class implements Command {
     const player = this.playerManager.get(interaction.guild!.id);
 
     if (player.status === STATUS.IDLE) {
-      throw new Error('沒有歌曲可循環播放！');
+      throw new Error('沒有歌曲可以循環！');
     }
 
     if (player.loopCurrentQueue) {
@@ -33,6 +33,6 @@ export default class implements Command {
 
     player.loopCurrentSong = !player.loopCurrentSong;
 
-    await interaction.reply((player.loopCurrentSong ? '開始循環播放 :)' : '停止循環播放 :('));
+    await interaction.reply((player.loopCurrentSong ? '開始循環單曲 :)' : '停止循環單曲 :('));
   }
 }
