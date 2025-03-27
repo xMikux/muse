@@ -56,7 +56,7 @@ Muse 在運行時將會顯示 URL 在記錄中。在瀏覽器中打開 URL 來�
 （用正確的值替換空的設定字串。）
 
 ```bash
-docker run -it -v "$(pwd)/data":/data -e DISCORD_TOKEN='' -e SPOTIFY_CLIENT_ID='' -e SPOTIFY_CLIENT_SECRET='' -e YOUTUBE_API_KEY='' ghcr.io/museofficial/muse:latest
+docker run -it -v "$(pwd)/data":/data -e DISCORD_TOKEN='' -e SPOTIFY_CLIENT_ID='' -e SPOTIFY_CLIENT_SECRET='' -e YOUTUBE_API_KEY='' ghcr.io/xmikux/muse:latest
 ```
 
 這會啟動 Muse，並創建一個 data 資料夾在你目前的資料夾位置。
@@ -68,7 +68,7 @@ docker run -it -v "$(pwd)/data":/data -e DISCORD_TOKEN='' -e SPOTIFY_CLIENT_ID='
 ```yaml
 services:
   muse:
-    image: ghcr.io/museofficial/muse:latest
+    image: ghcr.io/xmikux/muse:latest
     restart: always
     volumes:
       - ./muse:/data
