@@ -5,6 +5,10 @@ FROM node:22-bullseye-slim AS base
 # Install ffmpeg
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
+    build-essential \
+    python3 \
+    python3-distutils \
+    python3-venv \
     ffmpeg \
     tini \
     openssl \
@@ -12,6 +16,8 @@ RUN apt-get update \
     && apt-get autoclean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
+
+ENV PYTHON=/usr/bin/python3
 
 # Install dependencies
 FROM base AS dependencies
