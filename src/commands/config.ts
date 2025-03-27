@@ -37,10 +37,26 @@ export default class implements Command {
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('set-queue-add-response-hidden')
-      .setDescription('設定佇列新增回應隱藏')
+      .setDescription('設定機器人對佇列新增請求的回應是否僅顯示給請求者')
       .addBooleanOption(option => option
         .setName('value')
-        .setDescription('是否僅向請求者顯示機器人對佇列新增的回應')
+        .setDescription('機器人對佇列新增請求的回應是否僅顯示給請求者')
+        .setRequired(true)))
+    .addSubcommand(subcommand => subcommand
+      .setName('set-reduce-vol-when-voice')
+      .setDescription('設定當有人說話時是否降低音量')
+      .addBooleanOption(option => option
+        .setName('value')
+        .setDescription('當有人說話時是否降低音量')
+        .setRequired(true)))
+    .addSubcommand(subcommand => subcommand
+      .setName('set-reduce-vol-when-voice-target')
+      .setDescription('設定當有人說話時的目標音量')
+      .addIntegerOption(option => option
+        .setName('volume')
+        .setDescription('音量百分比（0 為靜音，100 為最大且預設值）')
+        .setMinValue(0)
+        .setMaxValue(100)
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('set-auto-announce-next-song')
@@ -199,6 +215,40 @@ export default class implements Command {
         break;
       }
 
+      case 'set-reduce-vol-when-voice': {
+        const value = interaction.options.getBoolean('value')!;
+
+        await prisma.setting.update({
+          where: {
+            guildId: interaction.guild!.id,
+          },
+          data: {
+            turnDownVolumeWhenPeopleSpeak: value,
+          },
+        });
+
+        await interaction.reply('👍 降低音量設定已更新');
+
+        break;
+      }
+
+      case 'set-reduce-vol-when-voice-target': {
+        const value = interaction.options.getInteger('volume')!;
+
+        await prisma.setting.update({
+          where: {
+            guildId: interaction.guild!.id,
+          },
+          data: {
+            turnDownVolumeWhenPeopleSpeakTarget: value,
+          },
+        });
+
+        await interaction.reply('👍 降低音量目標設定已更新');
+
+        break;
+      }
+
       case 'get': {
         const embed = new EmbedBuilder().setTitle('設定');
 
@@ -206,14 +256,15 @@ export default class implements Command {
 
         const settingsToShow = {
           '播放清單限制': config.playlistLimit,
-          '佇列清空後等待離開時間': config.secondsToWaitAfterQueueEmpties === 0
+          '佇列清空後等待離開的時間': config.secondsToWaitAfterQueueEmpties === 0
             ? '永不離開'
             : `${config.secondsToWaitAfterQueueEmpties}s`,
-          '無聽眾時離開': config.leaveIfNoListeners ? 'yes' : 'no',
-          '自動宣佈佇列中的下一首歌曲': config.autoAnnounceNextSong ? 'yes' : 'no',
-          '佇列新增回覆僅顯示給請求者': config.autoAnnounceNextSong ? 'yes' : 'no',
+          '無聆聽者時自動離開': config.leaveIfNoListeners ? 'yes' : 'no',
+          '自動公告下一首歌曲': config.autoAnnounceNextSong ? 'yes' : 'no',
+          '佇列新增回應僅對請求者可見': config.autoAnnounceNextSong ? 'yes' : 'no',
           '預設音量': config.defaultVolume,
           '預設佇列頁面大小': config.defaultQueuePageSize,
+          '當有人說話時降低音量': config.turnDownVolumeWhenPeopleSpeak ? 'yes' : 'no',
         };
 
         let description = '';

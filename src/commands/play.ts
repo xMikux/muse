@@ -1,7 +1,7 @@
 import {AutocompleteInteraction, ChatInputCommandInteraction} from 'discord.js';
 import {URL} from 'url';
-import {SlashCommandBuilder} from '@discordjs/builders';
-import {inject, injectable} from 'inversify';
+import {SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder} from '@discordjs/builders';
+import {inject, injectable, optional} from 'inversify';
 import Spotify from 'spotify-web-api-node';
 import Command from './index.js';
 import {TYPES} from '../types.js';
@@ -13,37 +13,43 @@ import AddQueryToQueue from '../services/add-query-to-queue.js';
 
 @injectable()
 export default class implements Command {
-  public readonly slashCommand = new SlashCommandBuilder()
-    .setName('play')
-    .setDescription('播放一首歌曲')
-    .addStringOption(option => option
-      .setName('query')
-      .setDescription('YouTube 連結、Spotify 連結，或搜尋關鍵字')
-      .setAutocomplete(true)
-      .setRequired(true))
-    .addBooleanOption(option => option
-      .setName('immediate')
-      .setDescription('將歌曲加入佇列最前面'))
-    .addBooleanOption(option => option
-      .setName('shuffle')
-      .setDescription('如果你要加入多首歌曲，則會隨機播放這些歌曲'))
-    .addBooleanOption(option => option
-      .setName('split')
-      .setDescription('如果歌曲有章節，則將其分割成單獨歌曲'))
-    .addBooleanOption(option => option
-      .setName('skip')
-      .setDescription('跳過目前正在播放的歌曲'));
+  public readonly slashCommand: Partial<SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder> & Pick<SlashCommandBuilder, 'toJSON'>;
 
   public requiresVC = true;
 
-  private readonly spotify: Spotify;
+  private readonly spotify?: Spotify;
   private readonly cache: KeyValueCacheProvider;
   private readonly addQueryToQueue: AddQueryToQueue;
 
-  constructor(@inject(TYPES.ThirdParty) thirdParty: ThirdParty, @inject(TYPES.KeyValueCache) cache: KeyValueCacheProvider, @inject(TYPES.Services.AddQueryToQueue) addQueryToQueue: AddQueryToQueue) {
-    this.spotify = thirdParty.spotify;
+  constructor(@inject(TYPES.ThirdParty) @optional() thirdParty: ThirdParty, @inject(TYPES.KeyValueCache) cache: KeyValueCacheProvider, @inject(TYPES.Services.AddQueryToQueue) addQueryToQueue: AddQueryToQueue) {
+    this.spotify = thirdParty?.spotify;
     this.cache = cache;
     this.addQueryToQueue = addQueryToQueue;
+
+    const queryDescription = thirdParty === undefined
+      ? 'YouTube 連結或搜尋關鍵字'
+      : 'YouTube 連結、Spotify 連結，或搜尋關鍵字';
+
+    this.slashCommand = new SlashCommandBuilder()
+      .setName('play')
+      .setDescription('播放歌曲')
+      .addStringOption(option => option
+        .setName('query')
+        .setDescription(queryDescription)
+        .setAutocomplete(true)
+        .setRequired(true))
+      .addBooleanOption(option => option
+        .setName('immediate')
+        .setDescription('將歌曲加入佇列最前方'))
+      .addBooleanOption(option => option
+        .setName('shuffle')
+        .setDescription('若新增多首歌曲，是否隨機排序'))
+      .addBooleanOption(option => option
+        .setName('split')
+        .setDescription('如果歌曲有章節，是否拆分'))
+      .addBooleanOption(option => option
+        .setName('skip')
+        .setDescription('跳過目前播放的歌曲'));
   }
 
   public async execute(interaction: ChatInputCommandInteraction): Promise<void> {
